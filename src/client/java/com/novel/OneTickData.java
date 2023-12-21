@@ -7,6 +7,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.Precipitation;
 
 /**
  * OneTickData
@@ -22,7 +23,6 @@ public class OneTickData {
   public OneTickData(ClientWorld world, ClientPlayerEntity player) {
     this.currentWorld = world;
     this.player = player;
-    update();
   }
 
   public OneTickData() {}
@@ -31,8 +31,12 @@ public class OneTickData {
     RegistryEntry<Biome> biomeEntry = currentWorld.getBiome(player.getBlockPos());
     this.biome = biomeEntry.value();
     this.biomeKey = biomeEntry.getKey().get();
-    this.time = currentWorld.getTimeOfDay();
+    this.time = currentWorld.getTimeOfDay() % 24000;
 
+  }
+
+  private void print(String str) {
+    this.logger.info(str);
   }
 
   private void setPlayer(ClientPlayerEntity player) {
@@ -43,15 +47,61 @@ public class OneTickData {
     this.currentWorld = world;
   }
 
+  private String buildTime(long time) {
+    if (time >= 0 && time < 450) // sunrise
+      return "Sunrise";
+    if (time >= 450 && time < 5000) // day
+      return "Day";
+    if (time >= 5000 && time < 7000) // noon
+      return "Noon";
+    if (time >= 5000 && time < 11617) // afternoon
+      return "Afternoon";
+    if (time >= 11617 && time < 13702) // sunset
+      return "Sunset";
+    if (time >= 13702 && time < 18000) // night
+      return "Night";
+    if (time >= 18000 && time < 22200) // midnight
+      return "Midnight";
+    if (time >= 22200) // sunrise
+      return "Sunrise";
+    return "";
+  }
+
+  private String buildClimate() {
+    Precipitation type = biome.getPrecipitation(player.getBlockPos());
+    boolean isRain = currentWorld.isRaining();
+    boolean isTunder = currentWorld.isThundering();
+    switch (type) {
+      case RAIN:
+        if (isRain && isTunder)
+          return "Thundering";
+        else if (isRain)
+          return "Raining";
+        break;
+      case SNOW:
+        if (isRain)
+          return "Snow";
+        break;
+      case NONE:
+        if (isRain)
+          return "Cloudy";
+        break;
+      default:
+        break;
+    }
+    return "Sunny";
+  }
+
   public void setPlayerWorld(ClientPlayerEntity player, ClientWorld world) {
     setPlayer(player);
     setWorld(world);
-    update();
   }
 
   public void printInfo() {
+    update();
     String BiomeStr = BiomeMap.getMap().get(biomeKey);
-    String time = Long.toString(this.time);
-    // logger.info("Biome : " + BiomeStr + "\nTime : " + time);
+    String timeStr = buildTime(this.time);
+    String climateStr = buildClimate();
+    print("Biome : " + BiomeStr + ", Time : " + timeStr + ", Climate : " + climateStr);
   }
 }

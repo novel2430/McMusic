@@ -15,7 +15,6 @@ public class OutputDataClient implements ClientModInitializer {
         getData.setWorld(world);
         getDataThread = new Thread(getData);
         getDataThread.start();
-      } else {
       }
     });
   }
