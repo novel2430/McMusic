@@ -1,5 +1,6 @@
 package com.novel;
 
+import org.slf4j.LoggerFactory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -28,9 +29,15 @@ public class GetDataThread implements Runnable {
   }
 
   public void run() {
+    try {
+      Thread.sleep(3000);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    LoggerFactory.getLogger("outputdata").info("=== Get Data Thread Start ===");
     ClientPlayerEntity player = currentClient.player;
+    oneTickData.setPlayerWorld(player, currentWorld);
     while (player != null) {
-      oneTickData.setPlayerWorld(player, currentWorld);
       oneTickData.printInfo();
       player = currentClient.player;
       try {
@@ -39,7 +46,7 @@ public class GetDataThread implements Runnable {
         e.printStackTrace();
       }
     }
-    // LoggerFactory.getLogger("outputdata").info("Thread End!");
+    LoggerFactory.getLogger("outputdata").info("=== Get Data Thread End ===");
   }
 
 }

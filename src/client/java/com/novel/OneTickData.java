@@ -6,6 +6,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.Precipitation;
 
@@ -19,20 +20,23 @@ public class OneTickData {
   private Biome biome = null;
   private RegistryKey<Biome> biomeKey = null;
   private long time = 0;
+  private BlockPos playerBlockPos = null;
+
 
   public OneTickData(ClientWorld world, ClientPlayerEntity player) {
     this.currentWorld = world;
     this.player = player;
+    this.playerBlockPos = player.getBlockPos();
   }
 
   public OneTickData() {}
 
   private void update() {
-    RegistryEntry<Biome> biomeEntry = currentWorld.getBiome(player.getBlockPos());
+    this.playerBlockPos = player.getBlockPos();
+    RegistryEntry<Biome> biomeEntry = currentWorld.getBiome(this.playerBlockPos);
     this.biome = biomeEntry.value();
     this.biomeKey = biomeEntry.getKey().get();
     this.time = currentWorld.getTimeOfDay() % 24000;
-
   }
 
   private void print(String str) {
@@ -68,7 +72,7 @@ public class OneTickData {
   }
 
   private String buildClimate() {
-    Precipitation type = biome.getPrecipitation(player.getBlockPos());
+    Precipitation type = biome.getPrecipitation(this.playerBlockPos);
     boolean isRain = currentWorld.isRaining();
     boolean isTunder = currentWorld.isThundering();
     switch (type) {
@@ -89,7 +93,15 @@ public class OneTickData {
       default:
         break;
     }
-    return "Sunny";
+    return "Clear";
+  }
+
+  private String buildTemperature() {
+    boolean isCold = biome.isCold(this.playerBlockPos);
+    if (isCold)
+      return "Cold";
+    else
+      return "Not Cold";
   }
 
   public void setPlayerWorld(ClientPlayerEntity player, ClientWorld world) {
@@ -102,6 +114,8 @@ public class OneTickData {
     String BiomeStr = BiomeMap.getMap().get(biomeKey);
     String timeStr = buildTime(this.time);
     String climateStr = buildClimate();
-    print("Biome : " + BiomeStr + ", Time : " + timeStr + ", Climate : " + climateStr);
+    String temp = buildTemperature();
+    print("[Biome]: " + BiomeStr + ", [Time]: " + timeStr + ", [Climate]: " + climateStr
+        + ", [Temperature]: " + temp);
   }
 }

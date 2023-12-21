@@ -59,6 +59,7 @@ public class BiomeMap {
       biomeMap.put(BiomeKeys.RIVER, "River");
       biomeMap.put(BiomeKeys.SWAMP, "Swamp");
       biomeMap.put(BiomeKeys.SAVANNA, "Savanna");
+      biomeMap.put(BiomeKeys.SNOWY_PLAINS, "Snowy Plains");
       biomeMap.put(BiomeKeys.SNOWY_BEACH, "Snowy Beach");
       biomeMap.put(BiomeKeys.SNOWY_TAIGA, "Snowy Taiga");
       biomeMap.put(BiomeKeys.STONY_PEAKS, "Stony Peaks");
