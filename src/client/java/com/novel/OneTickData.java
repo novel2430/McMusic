@@ -104,6 +104,29 @@ public class OneTickData {
       return "Not Cold";
   }
 
+  private String buildEnvDataString() {
+    String biome = BiomeMap.getMap().get(biomeKey);
+    String time = buildTime(this.time);
+    String climate = buildClimate();
+    String temperature = buildTemperature();
+    String res = String.format(
+        "===== Environment =====\n[Biome]: %s\n[Time]: %s\n[Climate]: %s\n[Temperature]: %s", biome,
+        time, climate, temperature);
+    return res;
+  }
+
+  private String buildPlayerDataString() {
+    int foodLevel = player.getHungerManager().getFoodLevel();
+    float hleath = player.getHealth();
+    String res = String.format("===== Player =====\n[Hleath]: %f\n[Hunger]: %d", hleath, foodLevel);
+    return res;
+  }
+
+  private String buildPrintOutput(String envStr, String playerStr) {
+    String res = String.format("\n%s\n%s", envStr, playerStr);
+    return res;
+  }
+
   public void setPlayerWorld(ClientPlayerEntity player, ClientWorld world) {
     setPlayer(player);
     setWorld(world);
@@ -111,11 +134,6 @@ public class OneTickData {
 
   public void printInfo() {
     update();
-    String BiomeStr = BiomeMap.getMap().get(biomeKey);
-    String timeStr = buildTime(this.time);
-    String climateStr = buildClimate();
-    String temp = buildTemperature();
-    print("[Biome]: " + BiomeStr + ", [Time]: " + timeStr + ", [Climate]: " + climateStr
-        + ", [Temperature]: " + temp);
+    print(buildPrintOutput(buildEnvDataString(), buildPlayerDataString()));
   }
 }
