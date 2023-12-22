@@ -104,6 +104,97 @@ public class OneTickData {
       return "Not Cold";
   }
 
+  private String buildFoodLevel() {
+    int foodLevel = player.getHungerManager().getFoodLevel();
+    if (foodLevel <= 0) {
+      return "Starve";
+    }
+    if (foodLevel < 10) {
+      return "Hungry";
+    }
+    if (foodLevel < 20) {
+      return "Normal";
+    }
+    if (foodLevel >= 20) {
+      return "Full";
+    }
+    return "Full";
+  }
+
+  private String buildHealth() {
+    float hleath = player.getHealth();
+    if (hleath <= 0) {
+      return "Die";
+    }
+    if (hleath < 5) {
+      return "Dying";
+    }
+    if (hleath < 15) {
+      return "Normal";
+    }
+    if (hleath < 20) {
+      return "Safe";
+    }
+    if (hleath >= 20) {
+      return "Full";
+    }
+    return "Full";
+  }
+
+  private String buildWet() {
+    boolean isTochingWaterOrRain = player.isTouchingWaterOrRain();
+    boolean isTochingWater = player.isTouchingWater();
+    if (isTochingWaterOrRain && !isTochingWater) {
+      return "Being Rained";
+    }
+    if (isTochingWater) {
+      return "Toching Water";
+    }
+    return "None";
+  }
+
+  private String buildSprinting() {
+    if (player.isSprinting()) {
+      return "Sprinting";
+    }
+    return "Not Sprinting";
+  }
+
+  private String buildSneaking() {
+    if (player.isSneaking()) {
+      return "Sneaking";
+    }
+    return "Not Sneaking";
+  }
+
+  private String buildLava() {
+    if (player.isInLava()) {
+      return "In Lava";
+    }
+    return "Not In Lava";
+  }
+
+  private String buildFire() {
+    if (player.isOnFire()) {
+      return "On Fire";
+    }
+    return "Not On Fire";
+  }
+
+  private String buildGround() {
+    if (player.isOnGround()) {
+      return "On Ground";
+    }
+    return "Not On Ground";
+  }
+
+  private String buildRail() {
+    if (player.isOnRail()) {
+      return "On Rail";
+    }
+    return "Not On Rail";
+  }
+
   private String buildEnvDataString() {
     String biome = BiomeMap.getMap().get(biomeKey);
     String time = buildTime(this.time);
@@ -116,9 +207,18 @@ public class OneTickData {
   }
 
   private String buildPlayerDataString() {
-    int foodLevel = player.getHungerManager().getFoodLevel();
-    float hleath = player.getHealth();
-    String res = String.format("===== Player =====\n[Hleath]: %f\n[Hunger]: %d", hleath, foodLevel);
+    String hleathStr = buildHealth();
+    String foodStr = buildFoodLevel();
+    String wetStr = buildWet();
+    String sprintStr = buildSprinting();
+    String sneakStr = buildSneaking();
+    String lavaStr = buildLava();
+    String fireStr = buildFire();
+    String groundStr = buildGround();
+    String railStr = buildRail();
+    String res = String.format(
+        "===== Player =====\n[Hleath]: %s\n[Hunger]: %s\n[Wet]: %s\n[Fire]: %s\n[Motion]: %s, %s\n[Placing]: %s, %s, %s\n",
+        hleathStr, foodStr, wetStr, fireStr, sprintStr, sneakStr, groundStr, lavaStr, railStr);
     return res;
   }
 
