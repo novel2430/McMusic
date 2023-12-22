@@ -11,7 +11,7 @@
 ./gradlew runClient
 ```
 ## Proxy
-If you are not using <Clash>, you should modify the `gradle.properties`  
+If you are not using **Clash**, you should modify the `gradle.properties`  
 delete line 20 to line 23
 ```
 # Done to increase the memory available to gradle.
