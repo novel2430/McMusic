@@ -43,6 +43,16 @@ dependencies {
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+  // FastJson
+  implementation 'com.alibaba:fastjson:2.0.31'
+  // Lombok
+  compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+	testCompileOnly 'org.projectlombok:lombok:1.18.30'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+  // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+  implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
+
 }
 
 processResources {

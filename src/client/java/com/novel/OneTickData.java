@@ -236,4 +236,23 @@ public class OneTickData {
     update();
     print(buildPrintOutput(buildEnvDataString(), buildPlayerDataString()));
   }
+
+  public FrameData getFrameData() {
+    update();
+    String biome = BiomeMap.getMap().get(biomeKey);
+    String time = buildTime(this.time);
+    String climate = buildClimate();
+    String temperature = buildTemperature();
+    String hleath = buildHealth();
+    String food = buildFoodLevel();
+    String wet = buildWet();
+    String sprint = buildSprinting();
+    String sneak = buildSneaking();
+    String lava = buildLava();
+    String fire = buildFire();
+    String ground = buildGround();
+    String rail = buildRail();
+    return new FrameData(biome, time, climate, temperature, hleath, food, wet, fire, sprint, sneak,
+        ground, lava, rail);
+  }
 }
