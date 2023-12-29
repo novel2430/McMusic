@@ -49,7 +49,7 @@ you can change how long (Second) between each output, and some other settings
 1. if directory `run` not exist, create directory `run`
 2. copy file `outputDataConfig.json` in `run`, and it will be `run/outputDataConfig.json`
 3. modify `run/outputDataConfig.json` file
-```json
+```
 // run/outputDataConfig.json 
 // *Default
 {
