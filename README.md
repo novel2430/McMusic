@@ -1,4 +1,9 @@
 # Get Game Data Mod (Minecraft Client Mod)
+## Result
+### Terminal Output
+![image](https://github.com/novel2430/MyImage/blob/main/MCMUSIC-001.png?raw=true)
+### File Output
+![image](https://github.com/novel2430/MyImage/blob/main/MCMUSIC-002.png?raw=true)
 ## Requirement
 - Jdk >= 17
 ## Runing
@@ -39,29 +44,20 @@ systemProp.https.proxyHost=127.0.0.1
 systemProp.https.proxyPort=7890
 ```
 ## Setting
-You can change how long to get one game data  
-change line 16 in `src/client/java/com/novel/OutputDataClient.java`
-```java
-package com.novel;
-
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-
-public class OutputDataClient implements ClientModInitializer {
-  private GetDataThread getData = new GetDataThread();
-  private Thread getDataThread = new Thread();
-
-  @Override
-  public void onInitializeClient() {
-    // This entrypoint is suitable for setting up client-specific logic, such as rendering.
-    ClientTickEvents.START_WORLD_TICK.register((world) -> {
-      if (!getDataThread.isAlive()) {
-        getData.setWorld(world);
-        getData.setPause(5); // pause second <- Change Here
-        getDataThread = new Thread(getData, "Get Data Thread");
-        getDataThread.start();
-      }
-    });
-  }
+you can change how long (Second) between each output, and some other settings
+### Step
+1. if directory `run` not exist, create directory `run`
+2. copy file `outputDataConfig.json` in `run`, and it will be `run/outputDataConfig.json`
+3. modify `run/outputDataConfig.json` file
+```json
+// run/outputDataConfig.json 
+// *Default
+{
+  "PauseSecond": 5.0, // how long between each output
+  "SavePath": ".", // where to save ouput files
+                   // e.g. /home/novel2430
+                   // --> DO NOT put "/" at the path end! <--
+                   // --> path "." means directory `run` <--
+  "Debug": true // need or not to print thread log
 }
 ```
