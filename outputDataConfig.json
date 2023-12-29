@@ -1,5 +1,6 @@
 {
   "PauseSecond": 5.0,
   "SavePath": ".",
-  "Debug": true
+  "Debug": true,
+  "Calculate": true
 }
