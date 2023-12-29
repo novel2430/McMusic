@@ -150,7 +150,7 @@ public class OneTickData {
     if (isTochingWater) {
       return "Toching Water";
     }
-    return "None";
+    return "Not Touching Water";
   }
 
   private String buildSprinting() {

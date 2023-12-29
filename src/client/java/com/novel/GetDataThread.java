@@ -1,6 +1,8 @@
 package com.novel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import org.slf4j.LoggerFactory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -15,8 +17,8 @@ public class GetDataThread implements Runnable {
   private OneTickData oneTickData = new OneTickData();
   private double pauseSec = 5.0;
   private long startTime = 0;
-  private int currentMapIndex = 0;
-  private ArrayList<FrameData> frameDataList = new ArrayList<FrameData>();
+  private int currentIndex = 0;
+  private SimpleDateFormat dateFormate = new SimpleDateFormat("yyyyMMdd-HHmmss");
 
   public GetDataThread(ClientWorld world) {
     this.currentWorld = world;
@@ -41,22 +43,19 @@ public class GetDataThread implements Runnable {
     LoggerFactory.getLogger("outputdata").info("=== Get Data Thread Start ===");
     ClientPlayerEntity player = currentClient.player;
     oneTickData.setPlayerWorld(player, currentWorld);
+    ArrayList<FrameData> frameDataList = new ArrayList<FrameData>();
+    String nowDateStr = dateFormate.format(new Date());
     startTime = System.currentTimeMillis();
     while (player != null) {
       if (System.currentTimeMillis() - startTime > pauseSec * 1000) {
         // Create Caculate Thread
-        currentMapIndex++;
-        // frameDataList.clear();
+        CaculateThreadPool
+            .addTarget(new CaculateDataThread(this.currentIndex, frameDataList, nowDateStr));
+        currentIndex++;
+        frameDataList = new ArrayList<FrameData>();
         startTime = System.currentTimeMillis();
       }
-      // frameDataList.add(oneTickData.getFrameData());
-      FrameDataQueueMap.addData(currentMapIndex, oneTickData.getFrameData());
-      // oneTickData.printInfo();
-      // try {
-      // Thread.sleep((int) (pauseSec * 1000));
-      // } catch (Exception e) {
-      // e.printStackTrace();
-      // }
+      frameDataList.add(oneTickData.getFrameData());
       player = currentClient.player;
     }
     LoggerFactory.getLogger("outputdata").info("=== Get Data Thread End ===");
