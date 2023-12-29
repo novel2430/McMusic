@@ -1,7 +1,6 @@
 package com.novel;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -39,24 +38,30 @@ public class GetDataThread implements Runnable {
     // update player, world
     ClientPlayerEntity player = currentClient.player;
     oneTickData.setPlayerWorld(player, currentWorld);
-    // first frame data list
-    ArrayList<FrameData> frameDataList = new ArrayList<FrameData>();
     // frame calculation index
     int currentIndex = 0;
     // Reset pool
     CaculateThreadPool.reset();
     startTime = System.currentTimeMillis();
+    // Calculate Data Map
+    CaculateFrameData calculateData = new CaculateFrameData();
+    // Count Data Size
+    int dataSize = 0;
     // do Calculate
     while (player != null && Config.get().getCalculate()) {
       if (System.currentTimeMillis() - startTime > Config.get().getPauseSec() * 1000) {
         // Create Caculate Thread
         CaculateThreadPool
-            .addTarget(new CaculateDataThread(currentIndex, frameDataList, nowDateStr));
-        frameDataList = new ArrayList<FrameData>();
+            .addTarget(new CaculateDataThread(currentIndex, dataSize, calculateData, nowDateStr));
+        // frameDataList = new ArrayList<FrameData>();
         currentIndex++;
+        dataSize = 0;
+        calculateData = new CaculateFrameData();
         startTime = System.currentTimeMillis();
       }
-      frameDataList.add(oneTickData.getFrameData());
+      // frameDataList.add(oneTickData.getFrameData());
+      calculateData.updateAllMap(oneTickData.getFrameData());
+      dataSize++;
       player = currentClient.player;
     }
     // do no Calculate

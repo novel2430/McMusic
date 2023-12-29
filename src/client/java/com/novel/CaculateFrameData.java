@@ -1,7 +1,6 @@
 package com.novel;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -67,40 +66,42 @@ public class CaculateFrameData {
     clearMap(this.placing);
   }
 
-  private void caculate(List<FrameData> dataList) {
-    resetAllMap();
-    int size = dataList.size();
-    for (FrameData data : dataList) {
-      // biome
-      updateMap(biome, data.biome());
-      // time
-      updateMap(time, data.time());
-      // climate
-      updateMap(climate, data.climate());
-      // temperature
-      updateMap(temperature, data.temp());
-      // health
-      updateMap(health, data.hleath());
-      // hunger
-      updateMap(hunger, data.hunger());
-      // status (fire, water)
-      //// fire
-      updateMap(status, data.fire());
-      //// water
-      updateMap(status, data.wet());
-      // motion (sneak, sprint)
-      //// sneak
-      updateMap(motion, data.sneak());
-      //// sprint
-      updateMap(motion, data.sprint());
-      // placing (in lava, on rail, on gorund)
-      //// lava
-      updateMap(placing, data.lava());
-      //// rail
-      updateMap(placing, data.rail());
-      //// ground
-      updateMap(placing, data.ground());
-    }
+  public CaculateFrameData() {};
+
+  public void updateAllMap(FrameData data) {
+    // biome
+    updateMap(biome, data.biome());
+    // time
+    updateMap(time, data.time());
+    // climate
+    updateMap(climate, data.climate());
+    // temperature
+    updateMap(temperature, data.temp());
+    // health
+    updateMap(health, data.hleath());
+    // hunger
+    updateMap(hunger, data.hunger());
+    // status (fire, water)
+    //// fire
+    updateMap(status, data.fire());
+    //// water
+    updateMap(status, data.wet());
+    // motion (sneak, sprint)
+    //// sneak
+    updateMap(motion, data.sneak());
+    //// sprint
+    updateMap(motion, data.sprint());
+    // placing (in lava, on rail, on gorund)
+    //// lava
+    updateMap(placing, data.lava());
+    //// rail
+    updateMap(placing, data.rail());
+    //// ground
+    updateMap(placing, data.ground());
+  }
+
+
+  public void caculateAllMap(int size) {
     // biome
     caculateMap(biome, size);
     // time
@@ -119,18 +120,6 @@ public class CaculateFrameData {
     caculateMap(motion, size);
     // placing (in lava, on rail, on gorund)
     caculateMap(placing, size);
-    dataList = null;
-  };
-
-  public CaculateFrameData() {};
-
-  public CaculateFrameData(int index, List<FrameData> list) {
-    update(index, list);
-  }
-
-  public void update(int index, List<FrameData> list) {
-    this.index = index;
-    this.caculate(list);
   }
 
   public void updateNoCalculate(int index, FrameData data) {
