@@ -115,13 +115,13 @@ public class CaculateFrameData {
     caculateMap(motion, size);
     // placing (in lava, on rail, on gorund)
     caculateMap(placing, size);
+    dataList = null;
   };
 
   public CaculateFrameData() {};
 
   public CaculateFrameData(int index, List<FrameData> list) {
-    this.index = index;
-    caculate(list);
+    update(index, list);
   }
 
   public void update(int index, List<FrameData> list) {

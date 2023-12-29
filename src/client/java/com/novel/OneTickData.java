@@ -1,7 +1,5 @@
 package com.novel;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.registry.RegistryKey;
@@ -16,7 +14,6 @@ import net.minecraft.world.biome.Biome.Precipitation;
 public class OneTickData {
   private ClientWorld currentWorld = null;
   private ClientPlayerEntity player = null;
-  private Logger logger = LoggerFactory.getLogger("outputdata");
   private Biome biome = null;
   private RegistryKey<Biome> biomeKey = null;
   private long time = 0;
@@ -37,10 +34,6 @@ public class OneTickData {
     this.biome = biomeEntry.value();
     this.biomeKey = biomeEntry.getKey().get();
     this.time = currentWorld.getTimeOfDay() % 24000;
-  }
-
-  private void print(String str) {
-    this.logger.info(str);
   }
 
   private void setPlayer(ClientPlayerEntity player) {
@@ -195,47 +188,11 @@ public class OneTickData {
     return "Not On Rail";
   }
 
-  private String buildEnvDataString() {
-    String biome = BiomeMap.getMap().get(biomeKey);
-    String time = buildTime(this.time);
-    String climate = buildClimate();
-    String temperature = buildTemperature();
-    String res = String.format(
-        "===== Environment =====\n[Biome]: %s\n[Time]: %s\n[Climate]: %s\n[Temperature]: %s", biome,
-        time, climate, temperature);
-    return res;
-  }
-
-  private String buildPlayerDataString() {
-    String hleathStr = buildHealth();
-    String foodStr = buildFoodLevel();
-    String wetStr = buildWet();
-    String sprintStr = buildSprinting();
-    String sneakStr = buildSneaking();
-    String lavaStr = buildLava();
-    String fireStr = buildFire();
-    String groundStr = buildGround();
-    String railStr = buildRail();
-    String res = String.format(
-        "===== Player =====\n[Hleath]: %s\n[Hunger]: %s\n[Wet]: %s\n[Fire]: %s\n[Motion]: %s, %s\n[Placing]: %s, %s, %s\n",
-        hleathStr, foodStr, wetStr, fireStr, sprintStr, sneakStr, groundStr, lavaStr, railStr);
-    return res;
-  }
-
-  private String buildPrintOutput(String envStr, String playerStr) {
-    String res = String.format("\n%s\n%s", envStr, playerStr);
-    return res;
-  }
-
   public void setPlayerWorld(ClientPlayerEntity player, ClientWorld world) {
     setPlayer(player);
     setWorld(world);
   }
 
-  public void printInfo() {
-    update();
-    print(buildPrintOutput(buildEnvDataString(), buildPlayerDataString()));
-  }
 
   public FrameData getFrameData() {
     update();

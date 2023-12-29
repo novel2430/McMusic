@@ -13,7 +13,6 @@ public class OutputDataClient implements ClientModInitializer {
     ClientTickEvents.START_WORLD_TICK.register((world) -> {
       if (!getDataThread.isAlive()) {
         getData.setWorld(world);
-        getData.setPause(5); // pause second
         getDataThread = new Thread(getData, "Get Data Thread");
         getDataThread.start();
       }

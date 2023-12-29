@@ -7,20 +7,30 @@ import java.util.concurrent.Executors;
  * ThreadsPool
  */
 public class CaculateThreadPool {
-  private static ExecutorService pool;
-
-  private static void init() {
-    if (pool == null) {
-      int poolSize = 10;
-      pool = Executors.newFixedThreadPool(poolSize, new ThreadPoolNameFactory("Caculate"));
-    }
-  }
+  private static ExecutorService pool =
+      Executors.newFixedThreadPool(10, new ThreadPoolNameFactory("Caculate"));
 
   private CaculateThreadPool() {}
 
   public static void addTarget(CaculateDataThread run) {
-    init();
-    pool.execute(run);
+    try {
+      pool.execute(run);
+    } catch (Exception e) {
+
+    }
+  }
+
+  public static Boolean isDone() {
+    return pool.isTerminated();
+  }
+
+  public static void close() {
+    pool.shutdown();
+  }
+
+  public static void reset() {
+    if (pool.isShutdown())
+      pool = Executors.newFixedThreadPool(10, new ThreadPoolNameFactory("Caculate"));
   }
 
 }

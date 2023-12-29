@@ -1,7 +1,8 @@
 package com.novel;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.List;
-import org.slf4j.LoggerFactory;
 
 /**
  * CaculateDataThread
@@ -12,14 +13,24 @@ public class CaculateDataThread implements Runnable {
   private CaculateFrameData caculateRes = new CaculateFrameData();
   private String fileName;
 
+  private void writeFile() {
+    try {
+      BufferedWriter write =
+          new BufferedWriter(new FileWriter(Config.get().getSavePath() + "/" + this.fileName));
+      write.write(this.caculateRes.toJSONBeautyString());
+      write.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+
   public void run() {
-    LoggerFactory.getLogger("outputdata").info("=== Caculate Thread Start ===");
+    Util.printLog("=== Caculate Thread Start ===");
     this.caculateRes.update(this.index, this.dataList);
-    LoggerFactory.getLogger("outputdata").info(this.caculateRes.toJSONString());
-    // create Writing Thread
-    WriteThreadPool
-        .addTarget(new WriteFileThread(this.fileName, ".", this.caculateRes.toJSONBeautyString()));
-    LoggerFactory.getLogger("outputdata").info("=== Caculate Thread End ===");
+    Util.printLog(this.caculateRes.toJSONString());
+    writeFile();
+    Util.printLog("=== Caculate Thread End ===");
   }
 
   public CaculateDataThread(int index, List<FrameData> list, String gameStartTime) {
