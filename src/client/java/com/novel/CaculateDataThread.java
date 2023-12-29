@@ -12,6 +12,7 @@ public class CaculateDataThread implements Runnable {
   private List<FrameData> dataList;
   private CaculateFrameData caculateRes = new CaculateFrameData();
   private String fileName;
+  private FrameData data;
 
   private void writeFile() {
     try {
@@ -27,7 +28,10 @@ public class CaculateDataThread implements Runnable {
 
   public void run() {
     Util.printLog("=== Caculate Thread Start ===");
-    this.caculateRes.update(this.index, this.dataList);
+    if (Config.get().getCalculate())
+      this.caculateRes.update(this.index, this.dataList);
+    else
+      this.caculateRes.updateNoCalculate(this.index, this.data);
     Util.printLog(this.caculateRes.toJSONString());
     writeFile();
     Util.printLog("=== Caculate Thread End ===");
@@ -37,5 +41,11 @@ public class CaculateDataThread implements Runnable {
     this.index = index;
     this.dataList = list;
     this.fileName = gameStartTime + "-" + Integer.toString(index) + ".json";
+  }
+
+  public CaculateDataThread(int index, FrameData data, String gameStartTime) {
+    this.index = index;
+    this.fileName = gameStartTime + "-" + Integer.toString(index) + ".json";
+    this.data = data;
   }
 }

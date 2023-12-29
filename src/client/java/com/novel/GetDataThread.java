@@ -46,16 +46,28 @@ public class GetDataThread implements Runnable {
     // Reset pool
     CaculateThreadPool.reset();
     startTime = System.currentTimeMillis();
-    while (player != null) {
+    // do Calculate
+    while (player != null && Config.get().getCalculate()) {
       if (System.currentTimeMillis() - startTime > Config.get().getPauseSec() * 1000) {
         // Create Caculate Thread
         CaculateThreadPool
             .addTarget(new CaculateDataThread(currentIndex, frameDataList, nowDateStr));
-        currentIndex++;
         frameDataList = new ArrayList<FrameData>();
+        currentIndex++;
         startTime = System.currentTimeMillis();
       }
       frameDataList.add(oneTickData.getFrameData());
+      player = currentClient.player;
+    }
+    // do no Calculate
+    while (player != null && !Config.get().getCalculate()) {
+      if (System.currentTimeMillis() - startTime > Config.get().getPauseSec() * 1000) {
+        // Create Write Thread
+        CaculateThreadPool.addTarget(
+            new CaculateDataThread(currentIndex, oneTickData.getFrameData(), nowDateStr));
+        currentIndex++;
+        startTime = System.currentTimeMillis();
+      }
       player = currentClient.player;
     }
     // Close pool

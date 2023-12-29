@@ -41,6 +41,10 @@ public class CaculateFrameData {
     }
   }
 
+  private void noCalculateUpdateMap(Map<String, Double> map, String key) {
+    map.put(key, 100.0);
+  }
+
   private void caculateMap(Map<String, Double> map, int size) {
     for (Map.Entry<String, Double> entry : map.entrySet()) {
       map.replace(entry.getKey(), (entry.getValue() / size) * 100);
@@ -127,6 +131,40 @@ public class CaculateFrameData {
   public void update(int index, List<FrameData> list) {
     this.index = index;
     this.caculate(list);
+  }
+
+  public void updateNoCalculate(int index, FrameData data) {
+    resetAllMap();
+    // biome
+    noCalculateUpdateMap(biome, data.biome());
+    // time
+    noCalculateUpdateMap(time, data.time());
+    // climate
+    noCalculateUpdateMap(climate, data.climate());
+    // temperature
+    noCalculateUpdateMap(temperature, data.temp());
+    // health
+    noCalculateUpdateMap(health, data.hleath());
+    // hunger
+    noCalculateUpdateMap(hunger, data.hunger());
+    // status (fire, water)
+    //// fire
+    noCalculateUpdateMap(status, data.fire());
+    //// water
+    noCalculateUpdateMap(status, data.wet());
+    // motion (sneak, sprint)
+    //// sneak
+    noCalculateUpdateMap(motion, data.sneak());
+    //// sprint
+    noCalculateUpdateMap(motion, data.sprint());
+    // placing (in lava, on rail, on gorund)
+    //// lava
+    noCalculateUpdateMap(placing, data.lava());
+    //// rail
+    noCalculateUpdateMap(placing, data.rail());
+    //// ground
+    noCalculateUpdateMap(placing, data.ground());
+
   }
 
   public String toJSONBeautyString() {

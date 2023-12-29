@@ -58,6 +58,7 @@ you can change how long (Second) between each output, and some other settings
                    // e.g. /home/novel2430
                    // --> DO NOT put "/" at the path end! <--
                    // --> path "." means directory `run` <--
-  "Debug": true // need or not to print thread log
+  "Debug": true, // need or not to print thread log
+  "Calculate": true // need or not to do calculation
 }
 ```
