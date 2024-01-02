@@ -51,7 +51,7 @@ public class OneTickData {
       return "Day";
     if (time >= 5000 && time < 7000) // noon
       return "Noon";
-    if (time >= 5000 && time < 11617) // afternoon
+    if (time >= 7000 && time < 11617) // afternoon
       return "Afternoon";
     if (time >= 11617 && time < 13702) // sunset
       return "Sunset";
