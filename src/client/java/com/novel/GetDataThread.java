@@ -28,11 +28,13 @@ public class GetDataThread implements Runnable {
 
   public void run() {
     try {
-      Thread.sleep(3000);
+      Thread.sleep(1000);
     } catch (Exception e) {
       e.printStackTrace();
     }
     Util.printLog("=== Get Data Thread Start ===");
+    // http post <player join>
+    Util.httpAddPlayer();
     // game start time
     String nowDateStr = dateFormate.format(new Date());
     // update player, world
@@ -46,8 +48,6 @@ public class GetDataThread implements Runnable {
     CaculateFrameData calculateData = new CaculateFrameData();
     // Count Data Size
     int dataSize = 0;
-    // http post <player join>
-    Util.httpAddPlayer();
     // set time count
     startTime = System.currentTimeMillis();
     // do Calculate
