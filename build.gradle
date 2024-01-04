@@ -50,6 +50,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.30'
 	testCompileOnly 'org.projectlombok:lombok:1.18.30'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+  // OkHttp
+  implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
 }
 
 processResources {

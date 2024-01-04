@@ -14,7 +14,7 @@ public class GetDataThread implements Runnable {
   private MinecraftClient currentClient = MinecraftClient.getInstance();
   private OneTickData oneTickData = new OneTickData();
   private long startTime = 0;
-  private SimpleDateFormat dateFormate = new SimpleDateFormat("yyyyMMdd-HHmmss");
+  private SimpleDateFormat dateFormate = new SimpleDateFormat("yyyyMMddHHmmss");
 
   public GetDataThread(ClientWorld world) {
     this.currentWorld = world;
@@ -42,24 +42,25 @@ public class GetDataThread implements Runnable {
     int currentIndex = 0;
     // Reset pool
     CaculateThreadPool.reset();
-    startTime = System.currentTimeMillis();
     // Calculate Data Map
     CaculateFrameData calculateData = new CaculateFrameData();
     // Count Data Size
     int dataSize = 0;
+    // http post <player join>
+    Util.httpAddPlayer();
+    // set time count
+    startTime = System.currentTimeMillis();
     // do Calculate
     while (player != null && Config.get().getCalculate()) {
       if (System.currentTimeMillis() - startTime > Config.get().getPauseSec() * 1000) {
         // Create Caculate Thread
         CaculateThreadPool
             .addTarget(new CaculateDataThread(currentIndex, dataSize, calculateData, nowDateStr));
-        // frameDataList = new ArrayList<FrameData>();
         currentIndex++;
         dataSize = 0;
         calculateData = new CaculateFrameData();
         startTime = System.currentTimeMillis();
       }
-      // frameDataList.add(oneTickData.getFrameData());
       calculateData.updateAllMap(oneTickData.getFrameData());
       dataSize++;
       player = currentClient.player;
@@ -80,6 +81,8 @@ public class GetDataThread implements Runnable {
     // wait all threads done
     while (!CaculateThreadPool.isDone()) {
     }
+    // http post <Player Leave>
+    Util.httpRemovePlayer();
     Util.printLog("=== Get Data Thread End ===");
   }
 

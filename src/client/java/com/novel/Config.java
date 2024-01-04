@@ -15,6 +15,9 @@ public class Config {
   private String savePath;
   private Boolean debug;
   private Boolean calculate;
+  private String serverUrl;
+  private Boolean sendHttp;
+  private String playerName;
 
   private Config() {
     pauseSecond = 5.0; // gap between two caculation
@@ -23,6 +26,9 @@ public class Config {
                     // --> DO NOT put "/" at the end! <--
     debug = true; // need or not printing log
     calculate = true; // need or not do calculation
+    serverUrl = "http://127.0.0.1:44349"; // server url
+    sendHttp = true;
+    playerName = "novel2430"; // player name
     readConfigFile();
   }
 
@@ -38,11 +44,14 @@ public class Config {
         in.close();
         JSONObject json = JSON.parseObject(new String(fileContent));
         if (json.containsKey("PauseSecond") && json.containsKey("SavePath")
-            && json.containsKey("Debug") && json.containsKey("Calculate")) {
+            && json.containsKey("Debug") && json.containsKey("Calculate") && json.containsKey("URL")
+            && json.containsKey("PlayerName")) {
           this.pauseSecond = Double.parseDouble(json.get("PauseSecond").toString());
           this.savePath = (String) json.get("SavePath");
           this.debug = (Boolean) json.get("Debug");
           this.calculate = (Boolean) json.get("Calculate");
+          this.serverUrl = (String) json.get("URL");
+          this.playerName = (String) json.get("PlayerName");
         } else {
           Util.printWarnLog("ERROR! Config File Format Wrong!");
         }
@@ -80,6 +89,22 @@ public class Config {
 
   public Boolean getCalculate() {
     return this.calculate;
+  }
+
+  public String getServerUrl() {
+    return this.serverUrl;
+  }
+
+  public Boolean getSendHttp() {
+    return this.sendHttp;
+  }
+
+  public void setSendHttp(Boolean bool) {
+    this.sendHttp = bool;
+  }
+
+  public String getPlayerName() {
+    return this.playerName;
   }
 
 }

@@ -101,7 +101,9 @@ public class CaculateFrameData {
   }
 
 
-  public void caculateAllMap(int size) {
+  public void caculateAllMap(int index, int size) {
+    // update index
+    this.index = index;
     // biome
     caculateMap(biome, size);
     // time

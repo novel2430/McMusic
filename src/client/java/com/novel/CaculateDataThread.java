@@ -12,6 +12,7 @@ public class CaculateDataThread implements Runnable {
   private String fileName;
   private FrameData data;
   private int dataSize = 0;
+  private String gameStartTime;
 
   private void writeFile() {
     try {
@@ -26,18 +27,19 @@ public class CaculateDataThread implements Runnable {
 
   private void init(int index, String gameStartTime) {
     this.index = index;
+    this.gameStartTime = gameStartTime;
     this.fileName = gameStartTime + "-" + Integer.toString(index) + ".json";
   }
 
   public void run() {
     Util.printLog("=== Caculate Thread Start ===");
     if (Config.get().getCalculate())
-      // this.caculateRes.update(this.index, this.dataList);
-      this.caculateRes.caculateAllMap(this.dataSize);
+      this.caculateRes.caculateAllMap(this.index, this.dataSize);
     else
       this.caculateRes.updateNoCalculate(this.index, this.data);
     Util.printLog(this.caculateRes.toJSONString());
     writeFile();
+    Util.httpAddPlayerData(this.gameStartTime, this.caculateRes);
     Util.printLog("=== Caculate Thread End ===");
   }
 

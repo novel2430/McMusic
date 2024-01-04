@@ -1,6 +1,8 @@
 {
-  "PauseSecond": 5.0,
+  "PauseSecond": 10.0,
   "SavePath": ".",
   "Debug": true,
-  "Calculate": true
+  "Calculate": true,
+  "URL": "http://127.0.0.1:44349",
+  "PlayerName": "novel2430"
 }
