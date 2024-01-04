@@ -59,6 +59,8 @@ you can change how long (Second) between each output, and some other settings
                    // --> DO NOT put "/" at the path end! <--
                    // --> path "." means directory `run` <--
   "Debug": true, // need or not to print thread log
-  "Calculate": true // need or not to do calculation
+  "Calculate": true, // need or not to do calculation
+  "URL": "http://127.0.0.1:44349", // Data Transfer Server URL
+  "PlayerName": "novel2430" // Player Name
 }
 ```
