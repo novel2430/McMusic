@@ -3,7 +3,52 @@
 ### Terminal Output
 ![image](https://github.com/novel2430/MyImage/blob/main/MCMUSIC-001.png?raw=true)
 ### File Output
-![image](https://github.com/novel2430/MyImage/blob/main/MCMUSIC-002.png?raw=true)
+```json
+{
+	"Index":3,
+	"Biome":{
+		"Plains":100.0
+	},
+	"Time":{
+		"Midnight":100.0
+	},
+	"Climate":{
+		"Clear":100.0
+	},
+	"Temperature":{
+		"Not Cold":100.0
+	},
+	"Health":{
+		"Full":100.0
+	},
+	"Hunger":{
+		"Full":100.0
+	},
+	"Status":{
+		"Not Touching Water":100.0,
+		"Not On Fire":100.0
+	},
+	"Motion":{
+		"Not Sprinting":100.0,
+		"Not Sneaking":100.0
+	},
+	"Placing":{
+		"On Ground":100.0,
+		"Not In Lava":100.0,
+		"Not On Rail":100.0
+	},
+	"Monster":{
+		"skelton":2.0793548341035764,
+		"zombie":3.556985132528389,
+		"sum":7.780587773591776,
+		"spider":0.3294200931966782,
+		"creeper":1.8148277137631317
+	},
+	"Attacked":{
+		"Not Attacked":100.0
+	}
+}
+```
 ## Requirement
 - Jdk >= 17
 ## Runing
