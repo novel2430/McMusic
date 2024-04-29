@@ -31,12 +31,32 @@ public class CaculateFrameData {
   private Map<String, Double> motion = new HashMap<String, Double>();
   @JSONField(name = "Placing", ordinal = 10)
   private Map<String, Double> placing = new HashMap<String, Double>();
+  @JSONField(name = "Monster", ordinal = 11)
+  private Map<String, Double> monster = new HashMap<String, Double>();
+  @JSONField(name = "Attacked", ordinal = 12)
+  private Map<String, Double> attacker = new HashMap<String, Double>();
 
   private void updateMap(Map<String, Double> map, String key) {
     if (!map.containsKey(key)) {
       map.put(key, 1.0);
     } else {
       map.replace(key, map.get(key) + 1);
+    }
+  }
+
+  private void updateMonsterMap(String monsterName, int count) {
+    if (count <= 0)
+      return;
+    if (!monster.containsKey(monsterName)) {
+      monster.put(monsterName, (double) count);
+    } else {
+      monster.replace(monsterName, monster.get(monsterName) + count);
+    }
+  }
+
+  private void caculateMonsterMap(int size) {
+    for (Map.Entry<String, Double> entry : monster.entrySet()) {
+      monster.replace(entry.getKey(), (entry.getValue() / size));
     }
   }
 
@@ -98,6 +118,28 @@ public class CaculateFrameData {
     updateMap(placing, data.rail());
     //// ground
     updateMap(placing, data.ground());
+    // Monster
+    if (data.mosterRec() != null) {
+      updateMonsterMap("sum", data.mosterRec().hostile());
+      updateMonsterMap("zombie", data.mosterRec().zombie());
+      updateMonsterMap("zoglin", data.mosterRec().zoglin());
+      updateMonsterMap("vex", data.mosterRec().vex());
+      updateMonsterMap("blaze", data.mosterRec().blaze());
+      updateMonsterMap("giant", data.mosterRec().giant());
+      updateMonsterMap("patrik", data.mosterRec().patrik());
+      updateMonsterMap("piglin", data.mosterRec().piglin());
+      updateMonsterMap("spider", data.mosterRec().spider());
+      updateMonsterMap("warden", data.mosterRec().warden());
+      updateMonsterMap("wither", data.mosterRec().wither());
+      updateMonsterMap("creeper", data.mosterRec().creeper());
+      updateMonsterMap("skelton", data.mosterRec().skelton());
+      updateMonsterMap("enderman", data.mosterRec().enderman());
+      updateMonsterMap("guardian", data.mosterRec().guardian());
+      updateMonsterMap("endermite", data.mosterRec().endermite());
+      updateMonsterMap("silverfish", data.mosterRec().silverfish());
+    }
+    // Attacker
+    updateMap(attacker, data.attacker());
   }
 
 
@@ -122,6 +164,10 @@ public class CaculateFrameData {
     caculateMap(motion, size);
     // placing (in lava, on rail, on gorund)
     caculateMap(placing, size);
+    // Monster
+    caculateMonsterMap(size);
+    // Attacker
+    caculateMap(attacker, size);
   }
 
   public void updateNoCalculate(int index, FrameData data) {

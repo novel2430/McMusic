@@ -5,10 +5,10 @@ package com.novel;
  */
 public record FrameData(String biome, String time, String climate, String temp, String hleath,
     String hunger, String wet, String fire, String sprint, String sneak, String ground, String lava,
-    String rail) {
+    String rail, MonsterRecord mosterRec, String attacker) {
   public FrameData(String biome, String time, String climate, String temp, String hleath,
       String hunger, String wet, String fire, String sprint, String sneak, String ground,
-      String lava, String rail) {
+      String lava, String rail, MonsterRecord mosterRec, String attacker) {
     this.biome = biome;
     this.time = time;
     this.climate = climate;
@@ -22,5 +22,7 @@ public record FrameData(String biome, String time, String climate, String temp, 
     this.ground = ground;
     this.lava = lava;
     this.rail = rail;
+    this.mosterRec = mosterRec;
+    this.attacker = attacker;
   }
 }

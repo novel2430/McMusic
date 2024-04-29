@@ -15,6 +15,7 @@ public class GetDataThread implements Runnable {
   private OneTickData oneTickData = new OneTickData();
   private long startTime = 0;
   private SimpleDateFormat dateFormate = new SimpleDateFormat("yyyyMMddHHmmss");
+  private MonsterEntityMap monsterMap = null;
 
   public GetDataThread(ClientWorld world) {
     this.currentWorld = world;
@@ -24,6 +25,10 @@ public class GetDataThread implements Runnable {
 
   public void setWorld(ClientWorld world) {
     this.currentWorld = world;
+  }
+
+  public void setMonsterMap(MonsterEntityMap map) {
+    this.monsterMap = map;
   }
 
   public void run() {
@@ -54,6 +59,7 @@ public class GetDataThread implements Runnable {
     while (player != null && Config.get().getCalculate()) {
       if (System.currentTimeMillis() - startTime > Config.get().getPauseSec() * 1000) {
         // Create Caculate Thread
+        player.getDamageTracker().update();
         CaculateThreadPool
             .addTarget(new CaculateDataThread(currentIndex, dataSize, calculateData, nowDateStr));
         currentIndex++;
@@ -61,16 +67,19 @@ public class GetDataThread implements Runnable {
         calculateData = new CaculateFrameData();
         startTime = System.currentTimeMillis();
       }
-      calculateData.updateAllMap(oneTickData.getFrameData());
+      oneTickData.setPlayer(player);
+      calculateData.updateAllMap(oneTickData.getFrameData(monsterMap.getMonsterRecord()));
       dataSize++;
       player = currentClient.player;
+
+
     }
     // do no Calculate
     while (player != null && !Config.get().getCalculate()) {
       if (System.currentTimeMillis() - startTime > Config.get().getPauseSec() * 1000) {
         // Create Write Thread
         CaculateThreadPool.addTarget(
-            new CaculateDataThread(currentIndex, oneTickData.getFrameData(), nowDateStr));
+            new CaculateDataThread(currentIndex, oneTickData.getFrameData(null), nowDateStr));
         currentIndex++;
         startTime = System.currentTimeMillis();
       }
@@ -84,6 +93,9 @@ public class GetDataThread implements Runnable {
     // http post <Player Leave>
     Util.httpRemovePlayer();
     Util.printLog("=== Get Data Thread End ===");
+
+
+
   }
 
 }

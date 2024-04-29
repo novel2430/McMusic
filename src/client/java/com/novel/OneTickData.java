@@ -20,6 +20,7 @@ public class OneTickData {
   private BlockPos playerBlockPos = null;
 
 
+
   public OneTickData(ClientWorld world, ClientPlayerEntity player) {
     this.currentWorld = world;
     this.player = player;
@@ -36,7 +37,7 @@ public class OneTickData {
     this.time = currentWorld.getTimeOfDay() % 24000;
   }
 
-  private void setPlayer(ClientPlayerEntity player) {
+  public void setPlayer(ClientPlayerEntity player) {
     this.player = player;
   }
 
@@ -62,6 +63,14 @@ public class OneTickData {
     if (time >= 22200) // sunrise
       return "Sunrise";
     return "";
+  }
+
+  private String buildAttacker() {
+    if (player.getRecentDamageSource() != null
+        && player.getRecentDamageSource().getAttacker() != null) {
+      return "Attacked";
+    } else
+      return "Not Attacked";
   }
 
   private String buildClimate() {
@@ -194,8 +203,9 @@ public class OneTickData {
   }
 
 
-  public FrameData getFrameData() {
+  public FrameData getFrameData(MonsterRecord monsterRecord) {
     update();
+    String attacker = buildAttacker();
     String biome = BiomeMap.getMap().get(biomeKey);
     String time = buildTime(this.time);
     String climate = buildClimate();
@@ -209,7 +219,8 @@ public class OneTickData {
     String fire = buildFire();
     String ground = buildGround();
     String rail = buildRail();
+    MonsterRecord monster = monsterRecord;
     return new FrameData(biome, time, climate, temperature, hleath, food, wet, fire, sprint, sneak,
-        ground, lava, rail);
+        ground, lava, rail, monster, attacker);
   }
 }

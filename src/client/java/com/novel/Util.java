@@ -53,6 +53,7 @@ public class Util {
     JSONObject json = new JSONObject();
     json.put("PlayerName", Config.get().getPlayerName());
     Request req = buildRequest("/api/input/add-player", json);
+    Config.get().setSendHttp(true);
     try {
       if (!doPostIsSuccess(req)) {
         Config.get().setSendHttp(false);

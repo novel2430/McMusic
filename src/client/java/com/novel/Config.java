@@ -18,6 +18,7 @@ public class Config {
   private String serverUrl;
   private Boolean sendHttp;
   private String playerName;
+  private Integer playerDetectSize;
 
   private Config() {
     pauseSecond = 5.0; // gap between two caculation
@@ -29,6 +30,7 @@ public class Config {
     serverUrl = "http://127.0.0.1:44349"; // server url
     sendHttp = true;
     playerName = "novel2430"; // player name
+    playerDetectSize = 10;
     readConfigFile();
   }
 
@@ -45,13 +47,14 @@ public class Config {
         JSONObject json = JSON.parseObject(new String(fileContent));
         if (json.containsKey("PauseSecond") && json.containsKey("SavePath")
             && json.containsKey("Debug") && json.containsKey("Calculate") && json.containsKey("URL")
-            && json.containsKey("PlayerName")) {
+            && json.containsKey("PlayerName") && json.containsKey("DetectSize")) {
           this.pauseSecond = Double.parseDouble(json.get("PauseSecond").toString());
           this.savePath = (String) json.get("SavePath");
           this.debug = (Boolean) json.get("Debug");
           this.calculate = (Boolean) json.get("Calculate");
           this.serverUrl = (String) json.get("URL");
           this.playerName = (String) json.get("PlayerName");
+          this.playerDetectSize = Integer.parseInt(json.get("DetectSize").toString());
         } else {
           Util.printWarnLog("ERROR! Config File Format Wrong!");
         }
@@ -105,6 +108,10 @@ public class Config {
 
   public String getPlayerName() {
     return this.playerName;
+  }
+
+  public Integer getPlayerDetectSize() {
+    return this.playerDetectSize;
   }
 
 }
