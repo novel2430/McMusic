@@ -49,18 +49,25 @@ you can change how long (Second) between each output, and some other settings
 1. if directory `run` not exist, create directory `run`
 2. copy file `outputDataConfig.json` in `run`, and it will be `run/outputDataConfig.json`
 3. modify `run/outputDataConfig.json` file
-```
-// run/outputDataConfig.json 
-// *Default
+### Key Meaning
+| Key | Meaning |
+|---|---|
+| PauseSecond | how long between each output |
+| SavePath | where to save ouput files (DO NOT put "/" at the path end! Path "." means directory `run`) |
+| Debug | need or not to print thread log |
+| Calculate | need or not to do calculation |
+| URL | Data Transfer Server URL |
+| PlayerName | Player Name |
+| DetectSize | Size of detecting monster |
+### File Content
+```json
 {
-  "PauseSecond": 5.0, // how long between each output
-  "SavePath": ".", // where to save ouput files
-                   // e.g. /home/novel2430
-                   // --> DO NOT put "/" at the path end! <--
-                   // --> path "." means directory `run` <--
-  "Debug": true, // need or not to print thread log
-  "Calculate": true, // need or not to do calculation
-  "URL": "http://127.0.0.1:44349", // Data Transfer Server URL
-  "PlayerName": "novel2430" // Player Name
+  "PauseSecond": 10.0,
+  "SavePath": ".", 
+  "Debug": true,
+  "Calculate": true,
+  "URL": "http://127.0.0.1:44349",
+  "PlayerName": "novel2430",
+  "DetectSize": 20
 }
 ```

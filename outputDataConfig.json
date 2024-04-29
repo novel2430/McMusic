@@ -1,8 +1,9 @@
 {
   "PauseSecond": 10.0,
-  "SavePath": ".",
+  "SavePath": ".", 
   "Debug": true,
   "Calculate": true,
   "URL": "http://127.0.0.1:44349",
-  "PlayerName": "novel2430"
+  "PlayerName": "novel2430",
+  "DetectSize": 20
 }
