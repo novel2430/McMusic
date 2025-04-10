@@ -15,6 +15,7 @@
         glfw
         openal
         stdenv.cc.cc.lib
+        jdk21 #21
       ];
   in {
     devShell.x86_64-linux = pkgs.mkShell {
