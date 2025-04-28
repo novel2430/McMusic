@@ -1,7 +1,7 @@
 package com.novel;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
@@ -10,12 +10,12 @@ import net.minecraft.world.biome.BiomeKeys;
  * BiomeMap
  */
 public class BiomeMap {
-  private static Map<RegistryKey<Biome>, String> biomeMap;
+  private static final Map<RegistryKey<Biome>, String> biomeMap = new ConcurrentHashMap<RegistryKey<Biome>, String>();
 
   private BiomeMap() {}
 
   private static void buildMap() {
-    biomeMap = new HashMap<RegistryKey<Biome>, String>();
+    // biomeMap = new HashMap<RegistryKey<Biome>, String>();
     biomeMap.put(BiomeKeys.BADLANDS, "Badlands");
     biomeMap.put(BiomeKeys.BEACH, "Beach");
     biomeMap.put(BiomeKeys.BIRCH_FOREST, "Birch Forest");
@@ -84,7 +84,7 @@ public class BiomeMap {
   }
 
   public static Map<RegistryKey<Biome>, String> getMap() {
-    if (biomeMap == null) {
+    if (biomeMap.size() == 0) {
       // Build Map
       buildMap();
     }

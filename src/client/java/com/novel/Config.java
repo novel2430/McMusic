@@ -19,6 +19,12 @@ public class Config {
   private Boolean sendHttp;
   private String playerName;
   private Integer playerDetectSize;
+  // Predict Next Biome param
+  private Double directionAlpha;
+  private Double distanceBeta;
+  private Double distanceEpison;
+  private Integer biomePredictRange;
+  private Integer biomePredictSampleRate;
 
   private Config() {
     pauseSecond = 5.0; // gap between two caculation
@@ -30,7 +36,13 @@ public class Config {
     serverUrl = "http://127.0.0.1:44349"; // server url
     sendHttp = true;
     playerName = "novel2430"; // player name
+    //
     playerDetectSize = 10;
+    directionAlpha = 1.0;
+    distanceBeta = 1.0;
+    distanceEpison = 0.001;
+    biomePredictRange = 30;
+    biomePredictSampleRate = 5;
     readConfigFile();
   }
 
@@ -112,6 +124,26 @@ public class Config {
 
   public Integer getPlayerDetectSize() {
     return this.playerDetectSize;
+  }
+
+  public Double getDirectionAlpha() {
+    return this.directionAlpha;
+  }
+
+  public Double getDistanceBeta() {
+    return this.distanceBeta;
+  }
+
+  public Double getDistanceEpison() {
+    return this.distanceEpison;
+  }
+
+  public Integer getBiomePredictRange() {
+    return this.biomePredictRange;
+  }
+
+  public Integer getBiomePredictSampleRate() {
+    return this.biomePredictSampleRate;
   }
 
 }

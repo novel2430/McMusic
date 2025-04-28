@@ -2,56 +2,71 @@ package com.novel;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * CaculateDataThread
  */
 public class CaculateDataThread implements Runnable {
-  private int index = 0;
-  private CaculateFrameData caculateRes = new CaculateFrameData();
-  private String fileName;
-  private FrameData data;
-  private int dataSize = 0;
-  private String gameStartTime;
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-  private void writeFile() {
+  private void writeFile(String fileName, CaculateFrameData writeData) {
     try {
       BufferedWriter write =
-          new BufferedWriter(new FileWriter(Config.get().getSavePath() + "/" + this.fileName));
-      write.write(this.caculateRes.toJSONBeautyString());
+          new BufferedWriter(new FileWriter(Config.get().getSavePath() + "/" + fileName));
+      write.write(writeData.toJSONBeautyString());
       write.close();
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-  private void init(int index, String gameStartTime) {
-    this.index = index;
-    this.gameStartTime = gameStartTime;
-    this.fileName = gameStartTime + "-" + Integer.toString(index) + ".json";
-  }
-
   public void run() {
-    Util.printLog("=== Caculate Thread Start ===");
-    if (Config.get().getCalculate())
-      this.caculateRes.caculateAllMap(this.index, this.dataSize);
-    else
-      this.caculateRes.updateNoCalculate(this.index, this.data);
-    Util.printLog(this.caculateRes.toJSONString());
-    writeFile();
-    Util.httpAddPlayerData(this.gameStartTime, this.caculateRes);
-    Util.printLog("=== Caculate Thread End ===");
+    Util.printLog("=== Analyzer Thread Start ===");
+    // Init
+    LocalDateTime now = LocalDateTime.now();
+    String startDateTime = now.format(formatter);
+    Util.httpAddPlayer();
+
+    int currentIndex = 0;
+    // List<PlayerSnapshot> buffer = new ArrayList<>();
+    long startTime = System.currentTimeMillis();
+
+    while (Config.get().getCalculate() && Util.isGameRunning()) {
+      if (System.currentTimeMillis() - startTime > Config.get().getPauseSec() * 1000) {
+        if(FrameDataBuffer.getPushCount() > 0){
+          Util.printLog("=== Calculate ! ===");
+          // Do Calculate
+          CaculateFrameData calculateData = new CaculateFrameData(currentIndex);
+          calculateData.buildDataFromBuffer();
+          // Print Log
+          Util.printLog(calculateData.toJSONString());
+          // Write to Disk
+          // writeFile(startDateTime + "-" + Integer.toString(currentIndex) + ".json", calculateData);
+          // Http Update
+          Util.httpAddPlayerData(startDateTime, calculateData);
+          // Clean
+          FrameDataBuffer.clear();
+          currentIndex++;
+        }
+        startTime = System.currentTimeMillis();
+      }
+      // Slow down little bit!
+      try {
+          Thread.sleep(50);
+      } catch (InterruptedException e) {
+          e.printStackTrace();
+      }
+    }
+
+    // flush Stuff
+    FrameDataBuffer.clear();
+
+    // Util.httpRemovePlayer();
+    Util.printLog("=== Analyzer Thread End ===");
   }
 
-  public CaculateDataThread(int index, FrameData data, String gameStartTime) {
-    init(index, gameStartTime);
-    this.data = data;
-  }
+  public CaculateDataThread() {}
 
-  public CaculateDataThread(int index, int dataSize, CaculateFrameData caculateData,
-      String gameStartTime) {
-    init(index, gameStartTime);
-    this.dataSize = dataSize;
-    this.caculateRes = caculateData;
-  }
 }

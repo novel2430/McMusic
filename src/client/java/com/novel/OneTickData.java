@@ -18,13 +18,14 @@ public class OneTickData {
   private RegistryKey<Biome> biomeKey = null;
   private long time = 0;
   private BlockPos playerBlockPos = null;
-
-
+  private MonsterEntityMap monsterMap = new MonsterEntityMap();
 
   public OneTickData(ClientWorld world, ClientPlayerEntity player) {
     this.currentWorld = world;
     this.player = player;
     this.playerBlockPos = player.getBlockPos();
+    this.monsterMap.clearRecord();
+    this.monsterMap.setWorld(world);
   }
 
   public OneTickData() {}
@@ -203,7 +204,7 @@ public class OneTickData {
   }
 
 
-  public FrameData getFrameData(MonsterRecord monsterRecord) {
+  public FrameData getFrameData() {
     update();
     String attacker = buildAttacker();
     String biome = BiomeMap.getMap().get(biomeKey);
@@ -219,8 +220,8 @@ public class OneTickData {
     String fire = buildFire();
     String ground = buildGround();
     String rail = buildRail();
-    MonsterRecord monster = monsterRecord;
+    monsterMap.update();
     return new FrameData(biome, time, climate, temperature, hleath, food, wet, fire, sprint, sneak,
-        ground, lava, rail, monster, attacker);
+        ground, lava, rail, monsterMap.getMonsterRecord(), attacker);
   }
 }

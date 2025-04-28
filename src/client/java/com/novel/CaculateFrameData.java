@@ -86,7 +86,37 @@ public class CaculateFrameData {
     clearMap(this.placing);
   }
 
+  private void calculateFromBuffer(Map<String, Integer> bufferMap, Map<String, Double> dataMap, int pushCount){
+    for (Map.Entry<String, Integer> entry : bufferMap.entrySet()) {
+      dataMap.put(entry.getKey(), (entry.getValue() / (double)pushCount) * 100);
+    }
+  }
+
   public CaculateFrameData() {};
+
+  public CaculateFrameData(Integer index) {
+    this.index = index;
+  };
+
+  public void buildDataFromBuffer(){
+    int pushCount = FrameDataBuffer.getPushCount();
+    calculateFromBuffer(FrameDataBuffer.getBiomeMap(), this.biome, pushCount);
+    calculateFromBuffer(FrameDataBuffer.getTimeMap(), this.time, pushCount);
+    calculateFromBuffer(FrameDataBuffer.getClimateMap(), this.climate, pushCount);
+    calculateFromBuffer(FrameDataBuffer.getTemperatureMap(), this.temperature, pushCount);
+    calculateFromBuffer(FrameDataBuffer.getHealthMap(), this.health, pushCount);
+    calculateFromBuffer(FrameDataBuffer.getHungerMap(), this.hunger, pushCount);
+    calculateFromBuffer(FrameDataBuffer.getStatusMap(), this.status, pushCount);
+    calculateFromBuffer(FrameDataBuffer.getMotionMap(), this.motion, pushCount);
+    calculateFromBuffer(FrameDataBuffer.getPlacingMap(), this.placing, pushCount);
+    calculateFromBuffer(FrameDataBuffer.getAttackMap(), this.attacker, pushCount);
+    // Monster
+    Map<String, Integer> monsterMap = FrameDataBuffer.getMonsterMap();
+    for (Map.Entry<String, Integer> entry : monsterMap.entrySet()) {
+      monster.put(entry.getKey(), (double)entry.getValue() / pushCount);
+    }
+  }
+
 
   public void updateAllMap(FrameData data) {
     // biome

@@ -1,10 +1,14 @@
 package com.novel;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.LoggerFactory;
+import net.minecraft.client.MinecraftClient;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -15,6 +19,8 @@ import okhttp3.Response;
  * Util
  */
 public class Util {
+  private static final AtomicBoolean isGameRunning = new AtomicBoolean(false);
+
   private static OkHttpClient httpClient = httpClientBuild();
 
   private static OkHttpClient httpClientBuild() {
@@ -97,5 +103,26 @@ public class Util {
       Util.printWarnLog("Http Failed");
     }
   }
+
+  public static void updateGameStatus(MinecraftClient client) {
+      isGameRunning.set(client.player != null && client.world != null);
+  }
+
+  public static boolean isGameRunning() {
+      return isGameRunning.get();
+  }
+
+  public static Map<String, Double> softmaxScores(Map<String, Double> scores) {
+    double sumExp = 0.0;
+    for (double s : scores.values()) {
+        sumExp += Math.exp(s);
+    }
+    Map<String, Double> result = new HashMap<>();
+    for (Map.Entry<String, Double> entry : scores.entrySet()) {
+        result.put(entry.getKey(), Math.exp(entry.getValue()) / sumExp);
+    }
+    return result;
+  }
+
 
 }
