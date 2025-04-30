@@ -117,7 +117,7 @@ public class Util {
     for (double s : scores.values()) {
         sumExp += Math.exp(s);
     }
-    Map<String, Double> result = new HashMap<>();
+    Map<String, Double> result = new HashMap<String, Double>();
     for (Map.Entry<String, Double> entry : scores.entrySet()) {
         result.put(entry.getKey(), Math.exp(entry.getValue()) / sumExp);
     }

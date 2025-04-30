@@ -18,6 +18,11 @@ public class FrameDataBuffer {
   private static final Map<String, Integer> placing = new HashMap<String, Integer>();
   private static final Map<String, Integer> monster = new HashMap<String, Integer>();
   private static final Map<String, Integer> attacker = new HashMap<String, Integer>();
+  private static final Map<String, Double> biomePredict = new HashMap<String, Double>();
+
+  public static Map<String, Double> getBiomePredictMap(){
+    return biomePredict;
+  }
 
   public static Map<String, Integer> getBiomeMap(){
     return biome;
@@ -98,6 +103,9 @@ public class FrameDataBuffer {
       monster.merge("endermite", snap.mosterRec().endermite(), Integer::sum);
       monster.merge("silverfish", snap.mosterRec().silverfish(), Integer::sum);
     }
+    for(Map.Entry<String, Double> entry : snap.biomePredict().entrySet()) {
+      biomePredict.merge(entry.getKey(), entry.getValue(), Double::sum);
+    }
     pushCount.incrementAndGet(); 
   }
 
@@ -114,9 +122,11 @@ public class FrameDataBuffer {
     monster.clear();
     attacker.clear();
     pushCount.getAndSet(0);
+    biomePredict.clear();
   }
 
   public static Integer getPushCount() {
     return pushCount.get();
   }
+
 };

@@ -203,7 +203,6 @@ public class OneTickData {
     setWorld(world);
   }
 
-
   public FrameData getFrameData() {
     update();
     String attacker = buildAttacker();
@@ -222,6 +221,7 @@ public class OneTickData {
     String rail = buildRail();
     monsterMap.update();
     return new FrameData(biome, time, climate, temperature, hleath, food, wet, fire, sprint, sneak,
-        ground, lava, rail, monsterMap.getMonsterRecord(), attacker);
+        ground, lava, rail, monsterMap.getMonsterRecord(), attacker, BiomePredict
+            .getBiomePredict(this.player, this.playerBlockPos, this.currentWorld, this.biomeKey));
   }
 }

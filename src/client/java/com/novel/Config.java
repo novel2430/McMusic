@@ -25,6 +25,7 @@ public class Config {
   private Double distanceEpison;
   private Integer biomePredictRange;
   private Integer biomePredictSampleRate;
+  private Integer biomePredictTickGap;
 
   private Config() {
     pauseSecond = 5.0; // gap between two caculation
@@ -36,13 +37,14 @@ public class Config {
     serverUrl = "http://127.0.0.1:44349"; // server url
     sendHttp = true;
     playerName = "novel2430"; // player name
-    //
     playerDetectSize = 10;
+    //
     directionAlpha = 1.0;
     distanceBeta = 1.0;
     distanceEpison = 0.001;
-    biomePredictRange = 30;
-    biomePredictSampleRate = 5;
+    biomePredictRange = 40;
+    biomePredictSampleRate = 2;
+    biomePredictTickGap = 20;
     readConfigFile();
   }
 
@@ -57,18 +59,41 @@ public class Config {
         in.read(fileContent);
         in.close();
         JSONObject json = JSON.parseObject(new String(fileContent));
-        if (json.containsKey("PauseSecond") && json.containsKey("SavePath")
-            && json.containsKey("Debug") && json.containsKey("Calculate") && json.containsKey("URL")
-            && json.containsKey("PlayerName") && json.containsKey("DetectSize")) {
+        if(json.containsKey("PauseSecond")) {
           this.pauseSecond = Double.parseDouble(json.get("PauseSecond").toString());
+        }
+        if(json.containsKey("SavePath")) {
           this.savePath = (String) json.get("SavePath");
+        }
+        if(json.containsKey("Debug")) {
           this.debug = (Boolean) json.get("Debug");
+        }
+        if(json.containsKey("Calculate")) {
           this.calculate = (Boolean) json.get("Calculate");
+        }
+        if (json.containsKey("URL")) {
           this.serverUrl = (String) json.get("URL");
+        }
+        if(json.containsKey("PlayerName")) {
           this.playerName = (String) json.get("PlayerName");
+        }
+        if(json.containsKey("DetectSize")) {
           this.playerDetectSize = Integer.parseInt(json.get("DetectSize").toString());
-        } else {
-          Util.printWarnLog("ERROR! Config File Format Wrong!");
+        }
+        if(json.containsKey("BiomePredictDirectionAlpha")) {
+          this.directionAlpha = Double.parseDouble(json.get("BiomePredictDirectionAlpha").toString());
+        }
+        if(json.containsKey("BiomePredictDistanceBeta")) {
+          this.distanceBeta = Double.parseDouble(json.get("BiomePredictDistanceBeta").toString());
+        }
+        if(json.containsKey("BiomePredictDetectSize")) {
+          this.biomePredictRange = Integer.parseInt(json.get("BiomePredictDetectSize").toString());
+        }
+        if(json.containsKey("BiomePredictSampleRate")) {
+          this.biomePredictSampleRate = Integer.parseInt(json.get("BiomePredictSampleRate").toString());
+        }
+        if(json.containsKey("BiomePredictTickInterval")) {
+          this.biomePredictTickGap = Integer.parseInt(json.get("BiomePredictTickInterval").toString());
         }
       } else {
         Util.printWarnLog("ERROR! Config File Not exists!");
@@ -144,6 +169,10 @@ public class Config {
 
   public Integer getBiomePredictSampleRate() {
     return this.biomePredictSampleRate;
+  }
+
+  public Integer getBiomePredictTickGap() {
+    return biomePredictTickGap;
   }
 
 }
