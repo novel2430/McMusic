@@ -63,7 +63,8 @@ public class CaculateDataThread implements Runnable {
     // flush Stuff
     FrameDataBuffer.clear();
 
-    // Util.httpRemovePlayer();
+    Util.httpRemovePlayer();
+
     Util.printLog("=== Analyzer Thread End ===");
   }
 
